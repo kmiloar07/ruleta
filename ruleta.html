@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ruleta — Solo 1 giro</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/TweenMax.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/zarocknz/javascript-winwheel@master/Winwheel.min.js"></script>
+  <style>
+    body {
+      background:#f9f9f9;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      min-height:100vh;
+      font-family:Arial;
+    }
+    canvas {
+      background:#fff;
+      border:3px solid #ddd;
+      border-radius:50%;
+      box-shadow:0 0 20px rgba(0,0,0,0.1);
+    }
+    button {
+      margin-top:15px;
+      padding:10px 18px;
+      font-size:16px;
+      cursor:pointer;
+      border:none;
+      border-radius:8px;
+      background:#ff3c3c;
+      color:white;
+    }
+    button:disabled { background:#aaa; cursor:not-allowed; }
+    #mensaje { margin-top:12px; font-weight:bold; }
+  </style>
+</head>
+<body>
+  <canvas id="ruleta" width="400" height="400"></canvas>
+  <button id="btnGirar">🎡 Girar</button>
+  <div id="mensaje"></div>
+
+  <script>
+    const segmentos = [
+      { fillStyle:'#f1ebd3', text:'Papas gratis 🍟' },
+      { fillStyle:'#f1c40f', text:'Bebida gratis 🥤' },
+      { fillStyle:'#e4112f', text:'Burger 20% OFF 🍔' },
+      { fillStyle:'#f1ebd3', text:'Papas gratis 🍟' },
+      { fillStyle:'#f1c40f', text:'Bebida gratis 🥤' },
+      { fillStyle:'#e4112f', text:'Burger 20% OFF 🍔' },
+      { fillStyle:'#f1ebd3', text:'Papas gratis 🍟' },
+      { fillStyle:'#f1c40f', text:'Bebida gratis 🥤' },
+      { fillStyle:'#e4112f', text:'Burger gratis 🍔' },
+    ];
+
+    let ruleta = new Winwheel({
+      'canvasId': 'ruleta',
+      'numSegments': segmentos.length,
+      'outerRadius': 180,
+      'textFontSize': 16,
+      'segments': segmentos,
+      'animation': {
+        'type': 'spinToStop',
+        'duration': 5,
+        'spins': 8,
+        'callbackFinished': mostrarResultado
+      }
+    });
+
+    const btn = document.getElementById("btnGirar");
+    const mensaje = document.getElementById("mensaje");
+    const storageKey = "ruleta_ya_giro";
+
+    if (localStorage.getItem(storageKey) === "true") {
+      btn.disabled = true;
+      btn.textContent = "Ya giraste 🎯";
+      mensaje.textContent = "Solo puedes girar una vez en este navegador.";
+    }
+
+    btn.addEventListener("click", () => {
+      ruleta.startAnimation();
+      btn.disabled = true;
+      btn.textContent = "Procesando...";
+      localStorage.setItem(storageKey, "true");
+    });
+
+    function mostrarResultado() {
+      const premio = ruleta.getIndicatedSegment();
+      mensaje.textContent = `¡Ganaste: ${premio.text}! 🎉`;
+      btn.textContent = "Ya giraste 🎯";
+    }
+  </script>
+</body>
+</html>
