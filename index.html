@@ -36,7 +36,7 @@
   </style>
 </head>
 <body>
-  <canvas id="ruleta" width="400" height="400"></canvas>
+  <canvas id="ruleta" width="500" height="500"></canvas>
   <button id="btnGirar">🎡 Girar</button>
   <div id="mensaje"></div>
 
@@ -56,8 +56,8 @@
     let ruleta = new Winwheel({
       'canvasId': 'ruleta',
       'numSegments': segmentos.length,
-      'outerRadius': 180,
-      'textFontSize': 16,
+      'outerRadius': 230,
+      'textFontSize': 18,
       'segments': segmentos,
       'animation': {
         'type': 'spinToStop',
@@ -92,3 +92,4 @@
   </script>
 </body>
 </html>
+
